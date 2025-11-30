@@ -11,6 +11,7 @@ import { createContext, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { styled } from "styled-components";
+import { useLocation } from "react-router-dom";
 
 export const ThemeContext = createContext(null);
 
@@ -18,30 +19,34 @@ function App() {
   const [theme, setTheme] = useState("dark");
   const themeStyle = theme === "light" ? Light : Dark;
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { pathname } = useLocation();
 
   return (
     <>
       <ThemeContext.Provider value={{ setTheme, theme }}>
         <ThemeProvider theme={themeStyle}>
           <AuthContextProvider>
-            <Container className={sidebarOpen ? "active" : ""}>
-              
-              <div className="ContentSidebar">
-                <Sidebar
-                  state={sidebarOpen}
-                  setState={() => setSidebarOpen(!sidebarOpen)}
-                />
-              </div>
+            {pathname != "/login" ? (
+              <Container className={sidebarOpen ? "active" : ""}>
+                <div className="ContentSidebar">
+                  <Sidebar
+                    state={sidebarOpen}
+                    setState={() => setSidebarOpen(!sidebarOpen)}
+                  />
+                </div>
 
-              <div className="ContentMenuambur">
-                <Menuambur />
-              </div>
+                <div className="ContentMenuambur">
+                  <Menuambur />
+                </div>
 
-              <Containerbody>
-                <MyRoutes />
-              </Containerbody>
+                <Containerbody>
+                  <MyRoutes />
+                </Containerbody>
+              </Container>
+            ) : (
+              <MyRoutes />
+            )}
 
-            </Container>
             <ReactQueryDevtools initialIsOpen={true} />
           </AuthContextProvider>
         </ThemeProvider>

@@ -10,7 +10,9 @@ export * from "./components/atoms/Icono.jsx";
 export * from "./components/molecules/Btnsave.jsx";
 
 // organisms
-
+export * from "./components/organisms/sidebar/Sidebar.jsx";
+export * from "./components/organisms/sidebar/SidebarCard.jsx";
+export * from "./components/organisms/Menuambur.jsx";
 
 // templates
 export * from "./components/templates/HomeTemplate.jsx";
@@ -41,6 +43,7 @@ export * from "./routers/routes.jsx";
 export * from "./store/AuthStore.jsx";
 
 // STYLES
+export * from "./styles/breakpoints.jsx";
 export * from "./styles/themes.jsx";
 export * from "./styles/variables.jsx";
 
@@ -48,6 +51,6 @@ export * from "./styles/variables.jsx";
 export * from "./supabase/supabase.config.jsx";
 
 // UTILS
-
+export * from "./utils/dataEstatica.jsx";
 
 

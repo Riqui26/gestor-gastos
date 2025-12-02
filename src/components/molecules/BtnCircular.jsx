@@ -26,20 +26,20 @@ export function BtnCircular({
 }
 
 const Container = styled.div`
-  background-color: ${(props) => props.bgcolor};
-  min-width: ${(props) => props.width};
-  min-height: ${(props) => props.height};
+  background-color: ${(props) => props.$gcolor};
+  min-width: ${(props) => props.$width};
+  min-height: ${(props) => props.$height};
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  transform: translatex(${(props) => props.translateX})
-    translateY(${(props) => props.translateY});
+  transform: translatex(${(props) => props.$translateX})
+    translateY(${(props) => props.$translateY});
 
   span {
-    font-size: ${(props) => props.fontsize};
+    font-size: ${(props) => props.$fontsize};
     text-align: center;
-    color: ${(props) => props.textColor};
+    color: ${(props) => props.$textColor};
   }
 `;

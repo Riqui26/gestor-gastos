@@ -30,8 +30,8 @@ export function DataUser({ stateConfig }) {
         bgcolor="#ffffff"
         textColor="#181616"
         fontsize="11px"
-        translateX="-50px"
-        translateY="-12px"
+        translateX="-55px"
+        translateY="-15px"
       />
       <span className="nombre">{user.name}</span>
       {stateConfig.state && (

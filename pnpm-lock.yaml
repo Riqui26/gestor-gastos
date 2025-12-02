@@ -17,6 +17,9 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: ^5.91.1
         version: 5.91.1(@tanstack/react-query@5.90.11(react@19.2.0))(react@19.2.0)
+      iso-country-currency:
+        specifier: ^0.7.2
+        version: 0.7.2
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -32,6 +35,9 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      sweetalert2:
+        specifier: ^11.26.3
+        version: 11.26.3
       zustand:
         specifier: ^5.0.8
         version: 5.0.8(@types/react@19.2.7)(react@19.2.0)
@@ -837,6 +843,9 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
+  iso-country-currency@0.7.2:
+    resolution: {integrity: sha512-RcFyqdvt1nbPPrUfAs2cuWnjynZYHU671r9MlcH7zn9Zkyif3tR9LJWVJmpFeSMDECDeycDUNiy9Mur+B21Sqw==}
+
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -1033,6 +1042,9 @@ packages:
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
+
+  sweetalert2@11.26.3:
+    resolution: {integrity: sha512-VU0hGw/WfI9h7Mh+SCsDlWgtxDwWZ6ccqS7QcO8zEeWnwplN1GptcLstq76OluUBSLUza6ldvKd3558OhjpJ9A==}
 
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
@@ -1874,6 +1886,8 @@ snapshots:
 
   isexe@2.0.0: {}
 
+  iso-country-currency@0.7.2: {}
+
   js-tokens@4.0.0: {}
 
   js-yaml@4.1.1:
@@ -2062,6 +2076,8 @@ snapshots:
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
+
+  sweetalert2@11.26.3: {}
 
   tinyglobby@0.2.15:
     dependencies:

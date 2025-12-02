@@ -4,13 +4,17 @@ export { default as App } from "./App.jsx";
 
 // COMPONENTS
 // atoms
+export * from "./components/atoms/BtnCerrar.jsx";
 export * from "./components/atoms/ContentHeader.jsx";
 export * from "./components/atoms/Icono.jsx";
 
 // molecules
+export * from "./components/molecules/fondosAnimados/Fondo1.jsx";
 export * from "./components/molecules/BtnCircular.jsx";
 export * from "./components/molecules/Btnsave.jsx";
+export * from "./components/molecules/InputBuscadorLista.jsx";
 export * from "./components/molecules/ItemsDesplegable.jsx";
+export * from "./components/molecules/ListaGenerica.jsx";
 export * from "./components/molecules/ListaMenuDesplegable.jsx";
 
 // organisms
@@ -18,7 +22,9 @@ export * from "./components/organisms/sidebar/Sidebar.jsx";
 export * from "./components/organisms/sidebar/SidebarCard.jsx";
 export * from "./components/organisms/DataUser.jsx";
 export * from "./components/organisms/Header.jsx";
+export * from "./components/organisms/ListaPaises.jsx";
 export * from "./components/organisms/Menuambur.jsx";
+export * from "./components/organisms/Selector.jsx";
 
 // templates
 export * from "./components/templates/ConfiguracionTemplate.jsx";
@@ -46,6 +52,7 @@ export * from "./routers/routes.jsx";
 
 // STORE
 export * from "./store/AuthStore.jsx";
+export * from "./store/UsuariosStore.jsx";
 
 // STYLES
 export * from "./styles/breakpoints.jsx";
@@ -58,6 +65,7 @@ export * from "./supabase/globalSupabase.jsx";
 export * from "./supabase/supabase.config.jsx";
 
 // UTILS
+export * from "./utils/Conversiones.jsx";
 export * from "./utils/dataEstatica.jsx";
 
 

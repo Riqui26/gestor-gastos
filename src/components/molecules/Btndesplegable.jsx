@@ -32,6 +32,7 @@ const Container = styled.div`
   }
 
   &:hover {
-    background-color: #fff;
+    opacity: 0.85;
+    transform: scale(1.02);
   }
 `;

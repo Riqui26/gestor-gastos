@@ -55,6 +55,7 @@ export function ConfiguracionTemplate() {
 
       <section className="area2">
         <h1>AJUSTES</h1>
+
         <ContentCard>
           <span>Moneda:</span>
           <Selector
@@ -70,6 +71,7 @@ export function ConfiguracionTemplate() {
             />
           )}
         </ContentCard>
+
         <ContentCard>
           <span>Tema:</span>
           <Selector
@@ -86,6 +88,7 @@ export function ConfiguracionTemplate() {
             />
           )}
         </ContentCard>
+        
         <Btnsave
           titulo="Guardar"
           bgcolor={v.colorselector}

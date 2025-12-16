@@ -8,9 +8,9 @@ export function BtnCerrar({ funcion }) {
 const Container = styled.span`
   cursor: pointer;
   font-size: 25px;
-  transition: all 0.2s;
+  //transition: all 0.2s;
   &:hover {
     color: ${() => v.colorselector};
-    transform: scale(1.2);
+    //transform: scale(1.2);
   }
 `;

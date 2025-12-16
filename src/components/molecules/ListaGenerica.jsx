@@ -6,14 +6,14 @@ export function ListaGenerica({ data,setState,funcion }) {
         funcion(p);
         setState();
     }
-    
+  
   return (
     <Container>
       <section className="contentClose">
         <BtnCerrar funcion={setState}/>
       </section>
       <section className="contentItems">
-        {data.map((item, index) => {
+        {(data || []).map((item, index) => {
           return (
             <ItemContainer key={index} onClick={()=>seleccionar(item)}>
               <span>{item.icono}</span>

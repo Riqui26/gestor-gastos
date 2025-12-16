@@ -13,6 +13,7 @@ export function ListaPaises({ setSelect, setState }) {
   const isocodigos = iso.getAllISOCodes();
   //console.log(isocodigos);
   const [dataresult, setDataresult] = useState([]);
+  
   function seleccionar(p) {
     setSelect(p);
     setState();

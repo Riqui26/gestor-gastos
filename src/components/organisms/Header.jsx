@@ -6,4 +6,4 @@ export function Header({ stateConfig }) {
       <DataUser stateConfig={stateConfig} />
     </ContentHeader>
   );
-}
+} 

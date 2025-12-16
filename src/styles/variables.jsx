@@ -26,7 +26,7 @@ import {IoIosArrowForward} from "react-icons/io"
 import fondo from "../assets/fondo1.svg";
 import {GrFormPrevious,GrCaretNext} from "react-icons/gr"
 import {MdOutlineBorderAll} from "react-icons/md"
-
+ 
 export const v = {
   sidebarWidth: `300px`,
   sidebarWidthInitial: `10vw`,

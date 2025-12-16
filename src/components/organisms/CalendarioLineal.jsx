@@ -1,7 +1,10 @@
 import styled from "styled-components";
-import { MdOutlineNavigateNext, MdArrowBackIos } from "react-icons/md";
+import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import { useEffect } from "react";
 import { useOperaciones } from "../../index";
+import { designSystem } from "../../styles/designSystem";
+import { v } from "../../styles/variables";
+
 const months = [
   "Enero",
   "Febrero",
@@ -22,7 +25,7 @@ let date = new Date(),
   currMonth = date.getMonth();
 
 export function CalendarioLineal({ value, setValue, setFormatoFecha }) {
-  const { colorCategoria, setMes, setAño } = useOperaciones();
+  const { tipo, setMes, setAño } = useOperaciones();
 
   function IniciarCalendario() {
     setValue(months[currMonth] + currYear);
@@ -66,78 +69,85 @@ export function CalendarioLineal({ value, setValue, setFormatoFecha }) {
     IniciarCalendario();
   }, []);
   return (
-    <Container className="wrapper" $colortext={colorCategoria}>
-      <header>
-        <div className="subcontainer">
-          <span onClick={atras} className="atras">
-            <MdArrowBackIos />
-          </span>
-          <section className="contentValue">
-            <p>{value.toString()}</p>
-          </section>
+    <Container $tipo={tipo}>
+      <NavButton onClick={atras} title="Mes anterior" $tipo={tipo}>
+        <MdNavigateBefore />
+      </NavButton>
+      
+      <MonthDisplay>
+        <MonthText>{value.toString()}</MonthText>
+      </MonthDisplay>
 
-          <span onClick={adelante} className="adelante">
-            <MdOutlineNavigateNext />
-          </span>
-        </div>
-      </header>
+      <NavButton onClick={adelante} title="Mes siguiente" $tipo={tipo}>
+        <MdNavigateNext />
+      </NavButton>
     </Container>
   );
 }
 
 const Container = styled.div`
-  width: 450px;
-  border-radius: 10px;
-  height: 100%;
-  display: flex;
-  justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  gap: ${designSystem.spacing.sm};
+  padding: 0 ${designSystem.spacing.md};
+  height: 48px;
+  background: ${({ $tipo }) => 
+    $tipo === "i" ? `${v.verde}10` : `${v.rojo}10`};
+  border: 2px solid ${({ $tipo }) => 
+    $tipo === "i" ? v.verde : v.rojo};
+  border-radius: ${designSystem.radius.lg};
+  width: 100%;
+  justify-content: space-between;
 
-  header {
-    display: flex;
-    align-items: center;
-    padding: 25px 30px 10px;
-    justify-content: space-between;
-    height: 100%;
-
-    .subcontainer {
-      display: flex;
-      color: ${(props) => props.$colortext};
-      align-items: center;
-      justify-content: center;
-
-      .contentValue {
-        border: 2px solid ${(props) => props.$colortext};
-        border-radius: 30px;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        padding: 10px;
-      }
-
-      .atras {
-        cursor: pointer;
-        margin-left: 20px;
-
-        svg {
-          width: 30px;
-          height: 30px;
-        }
-      }
-
-      .adelante {
-        cursor: pointer;
-        margin-right: 20px;
-
-        svg {
-          width: 45px;
-          height: 45px;
-        }
-      }
-    }
-
-    .current-date {
-      font-size: 1.45rem;
-      font-weight: 500;
-    }
+  @media (min-width: 576px) {
+    width: auto;
+    padding: 0 ${designSystem.spacing.lg};
+    gap: ${designSystem.spacing.md};
+    justify-content: center;
   }
+`;
+
+const NavButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: ${designSystem.radius.md};
+  background: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
+  transition: all ${designSystem.transition.fast};
+
+  svg {
+    font-size: 24px;
+  }
+
+  &:hover {
+    background: ${({ $tipo }) => 
+      $tipo === "i" ? v.verde : v.rojo};
+    color: #FFFFFF;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+const MonthDisplay = styled.div`
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ${designSystem.spacing.sm} ${designSystem.spacing.lg};
+`;
+
+const MonthText = styled.p`
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.text};
+  text-align: center;
 `;

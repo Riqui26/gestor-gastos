@@ -44,3 +44,19 @@ export async function EditarTemaMonedaUser(p) {
     alert(error.error_description || error.message + "EditarTemaMonedaUser");
   }
 };
+
+export async function ActualizarTemaUsuario(p) {
+  try {
+    const { error } = await supabase
+      .from("usuarios")
+      .update({ tema: p.tema })
+      .eq("id", p.id);
+    if (error) {
+      console.error("Error al actualizar tema:", error);
+      throw error;
+    }
+  } catch (error) {
+    console.error(error.error_description || error.message);
+    throw error;
+  }
+};

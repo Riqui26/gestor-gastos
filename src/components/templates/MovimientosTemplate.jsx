@@ -24,19 +24,20 @@ import { useQuery } from "@tanstack/react-query";
 
 export function MovimientosTemplate() {
   const [dataSelect, setdataSelect] = useState([]);
-  const [accion, setAccion] = useState("");
+  const [_accion, setAccion] = useState("");
   const [openRegistro, SetopenRegistro] = useState(false);
-  const [value, setValue] = useState(dayjs(Date.now()));
+  const [value, setValue] = useState(() => dayjs());
   const [formatoFecha, setFormatoFecha] = useState("");
   const [state, setState] = useState(false);
   const [stateTipo, setStateTipo] = useState(false);
+  const [stateCategoria, setStateCategoria] = useState(false);
+  const [categoriaFiltro, setCategoriaFiltro] = useState(null);
   const {
     setTipo,
     tipo,
     colorCategoria,
     año,
     mes,
-    bgCategoria,
     tituloBtnDesMovimientos,
   } = useOperaciones();
   const { idusuario } = useUsuariosStore();
@@ -48,17 +49,31 @@ export function MovimientosTemplate() {
     datamovimientos,
   } = useMovimientosStore();
   const { mostrarCuentas } = useCuentaStore();
-  const { mostrarCategorias } = useCategoriasStore();
+  const { mostrarCategorias, datacategoria } = useCategoriasStore();
 
   function openTipo() {
     setStateTipo(!stateTipo);
     setState(false);
+    setStateCategoria(false);
   }
 
   function cambiarTipo(p) {
     setTipo(p);
     setStateTipo(!stateTipo);
     setState(false);
+    setStateCategoria(false);
+    setCategoriaFiltro(null);
+  }
+
+  function openCategoria() {
+    setStateCategoria(!stateCategoria);
+    setStateTipo(false);
+    setState(false);
+  }
+
+  function cambiarCategoria(p) {
+    setCategoriaFiltro(p);
+    setStateCategoria(!stateCategoria);
   }
 
   function nuevoRegistro() {
@@ -66,6 +81,20 @@ export function MovimientosTemplate() {
     setAccion("Nuevo");
     setdataSelect([]);
   }
+
+  const movimientosFiltrados = categoriaFiltro
+    ? datamovimientos?.filter((m) => m.categorias === categoriaFiltro.text)
+    : datamovimientos;
+
+  const totalFiltradoPendientes = movimientosFiltrados
+    ?.filter((m) => m.estado === "0")
+    .reduce((acc, m) => acc + parseFloat(m.valor || 0), 0) || 0;
+
+  const totalFiltradoPagados = movimientosFiltrados
+    ?.filter((m) => m.estado === "1")
+    .reduce((acc, m) => acc + parseFloat(m.valor || 0), 0) || 0;
+
+  const totalFiltrado = totalFiltradoPendientes + totalFiltradoPagados;
 
   useQuery({
     queryKey: [
@@ -115,8 +144,8 @@ export function MovimientosTemplate() {
             }}
           >
             <Btndesplegable
-              textcolor={colorCategoria}
-              bgcolor={bgCategoria}
+              textcolor={tipo === "i" ? v.verde : v.rojo}
+              bgcolor={tipo === "i" ? `${v.verde}15` : `${v.rojo}15`}
               text={tituloBtnDesMovimientos}
               funcion={openTipo}
             />
@@ -128,12 +157,47 @@ export function MovimientosTemplate() {
               />
             )}
           </div>
+          
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <Btndesplegable
+              textcolor={tipo === "i" ? v.verde : v.rojo}
+              bgcolor={tipo === "i" ? `${v.verde}15` : `${v.rojo}15`}
+              text={categoriaFiltro ? categoriaFiltro.text : "Todas las categorías"}
+              funcion={openCategoria}
+            />
+            {stateCategoria && (
+              <ListaMenuDesplegable
+                data={[
+                  { text: "Todas las categorías", tipo: null },
+                  ...datacategoria.map((cat) => ({
+                    text: cat.descripcion,
+                    color: tipo === "i" ? v.verde : v.rojo,
+                    tipo: cat.id,
+                  })),
+                ]}
+                top="112%"
+                funcion={(p) => cambiarCategoria(p.tipo === null ? null : p)}
+              />
+            )}
+          </div>
+
+          <CalendarioLineal
+            value={value}
+            setValue={setValue}
+            formatofecha={formatoFecha}
+            setFormatoFecha={setFormatoFecha}
+            tipo={tipo}
+          />
         </ContentFiltros>
 
         <ContentFiltro>
           <Btnfiltro
-            textcolor={colorCategoria}
-            bgcolor={bgCategoria}
+            textcolor="#FFFFFF"
+            bgcolor={tipo === "i" ? v.verde : v.rojo}
             funcion={nuevoRegistro}
             icono={<v.agregar />}
           />
@@ -142,40 +206,32 @@ export function MovimientosTemplate() {
 
       <section className="totales">
         <CardTotales
-          total={totalMesAñoPendientes}
+          total={categoriaFiltro ? totalFiltradoPendientes : totalMesAñoPendientes}
           title={tipo == "g" ? "Gastos pendientes" : "Ingresos pendientes"}
           color={colorCategoria}
           icono={<v.flechaarribalarga />}
         />
         <CardTotales
-          total={totalMesAñoPagados}
+          total={categoriaFiltro ? totalFiltradoPagados : totalMesAñoPagados}
           title={tipo == "g" ? "Gastos pagados" : "Ingresos pagados"}
           color={colorCategoria}
           icono={<v.flechaabajolarga />}
         />
         <CardTotales
-          total={totalMesAño}
+          total={categoriaFiltro ? totalFiltrado : totalMesAño}
           title="Total"
           color={colorCategoria}
           icono={<v.balance />}
         />
       </section>
 
-      <section className="calendario">
-        <CalendarioLineal
-          value={value}
-          setValue={setValue}
-          formatofecha={formatoFecha}
-          setFormatoFecha={setFormatoFecha}
-        />
-      </section>
-
       <section className="main">
         <TablaMovimientos
-          data={datamovimientos}
+          data={movimientosFiltrados}
           setopenRegistro={SetopenRegistro}
           setdataSelect={setdataSelect}
           setAccion={setAccion}
+          tipo={tipo}
         />
       </section>
     </Container>
@@ -184,25 +240,35 @@ export function MovimientosTemplate() {
 
 const Container = styled.div`
   min-height: 100vh;
-  padding: 15px;
+  padding: 10px;
   width: 100%;
   background: ${({ theme }) => theme.bgtotal};
   color: ${({ theme }) => theme.text};
   display: grid;
   grid-template:
-    "header" 100px
-    "tipo" 100px
-    "totales" 360px
-    "calendario" 100px
+    "header" auto
+    "tipo" auto
+    "totales" auto
     "main" auto;
+  row-gap: 12px;
+
+  @media ${Device.mobile} {
+    padding: 12px;
+    row-gap: 14px;
+  }
 
   @media ${Device.tablet} {
+    padding: 15px;
+    row-gap: 16px;
     grid-template:
-      "header" 100px
-      "tipo" 100px
-      "totales" 100px
-      "calendario" 100px
-      "main" auto;
+      "header" 70px
+      "tipo" 80px
+      "totales" 90px
+      "main" 1fr;
+  }
+
+  @media ${Device.laptop} {
+    padding: 20px;
   }
 
   .header {
@@ -214,8 +280,22 @@ const Container = styled.div`
   .tipo {
     grid-area: tipo;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+
+    @media ${Device.mobile} {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    @media ${Device.tablet} {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
   }
 
   .totales {
@@ -223,18 +303,16 @@ const Container = styled.div`
     display: grid;
     align-items: center;
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
+
+    @media ${Device.mobile} {
+      gap: 10px;
+    }
 
     @media ${Device.tablet} {
       grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
     }
-  }
-
-  .calendario {
-    grid-area: calendario;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   .main {

@@ -2,20 +2,20 @@ import { CiPalette } from "react-icons/ci";
 import { BsEmojiLaughing } from "react-icons/bs";
 import { RiDeleteBin2Line, RiEditLine } from "react-icons/ri";
 import { IoIosArrowDown } from "react-icons/io";
-import { RiVipCrownFill } from "react-icons/ri";
+import { RiVipCrownLine } from "react-icons/ri";
 import { BiUserCircle } from "react-icons/bi";
 import { RiSettings3Line } from "react-icons/ri";
-import { MdExitToApp } from "react-icons/md";
-import { FcPicture } from "react-icons/fc";
-import { CgMathPlus } from "react-icons/cg";
+import { MdOutlineExitToApp } from "react-icons/md";
+import { HiOutlinePhotograph } from "react-icons/hi";
+import { HiOutlinePlus } from "react-icons/hi";
 import { TbBrandSupabase } from "react-icons/tb";
 import { FaReact } from "react-icons/fa";
 import { BsArrowDown, BsArrowUpShort } from "react-icons/bs";
-import { FaBalanceScale } from "react-icons/fa";
+import { HiOutlineScale } from "react-icons/hi";
 import logo from "../assets/logocerdo.png";
 import { BsGoogle } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
-import { BiSave } from "react-icons/bi";
+import { HiOutlineSave } from "react-icons/hi";
 import { BsQuestionCircle } from "react-icons/bs";
 import { HiOutlineChartPie } from "react-icons/hi";
 import { SlGraph } from "react-icons/sl";
@@ -54,23 +54,23 @@ export const v = {
   colorPrincipal: `#00F34A`,
   boxshadowGray: `0px 10px 15px -3px rgba(0,0,0,0.1)`,
   iconoFlechabajo: IoIosArrowDown,
-  iconocorona: RiVipCrownFill,
+  iconocorona: RiVipCrownLine,
   iconoUser: BiUserCircle,
   iconoSettings: RiSettings3Line,
-  iconoCerrarSesion: MdExitToApp,
-  iconofotovacia: FcPicture,
+  iconoCerrarSesion: MdOutlineExitToApp,
+  iconofotovacia: HiOutlinePhotograph,
   verde: `#53B257`,
   rojo: `#F54E41`,
-  agregar: CgMathPlus,
+  agregar: HiOutlinePlus,
   iconosupabase: TbBrandSupabase,
   iconoreact: FaReact,
   flechaabajolarga: BsArrowDown,
   flechaarribalarga: BsArrowUpShort,
-  balance: FaBalanceScale,
+  balance: HiOutlineScale,
   logo: logo,
   iconogoogle: BsGoogle,
   iconocerrar: RiCloseLine,
-  iconoguardar: BiSave,
+  iconoguardar: HiOutlineSave,
   iconoayuda: BsQuestionCircle,
   iconopie: HiOutlineChartPie,
   iconolineal: SlGraph,

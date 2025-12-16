@@ -1,12 +1,12 @@
 import { v } from "../styles/variables";
 import {
   AiOutlineHome,
-  AiOutlineApartment,
   AiOutlineSetting,
 } from "react-icons/ai";
-import { MdOutlineAnalytics } from "react-icons/md";
+import { MdOutlineAnalytics, MdCategory } from "react-icons/md";
 import { RiDashboard3Line } from "react-icons/ri";
-import { TbPig } from "react-icons/tb";
+import { BiTransfer } from "react-icons/bi";
+import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
 
 export const DesplegableUser = [
   {
@@ -64,13 +64,13 @@ export const LinksArray = [
     to: "/",
   },
   {
-    label: "Categorias",
-    icon: <MdOutlineAnalytics />,
+    label: "Categorías",
+    icon: <MdCategory />,
     to: "/categorias",
   },
   {
     label: "Movimientos",
-    icon: <AiOutlineApartment />,
+    icon: <BiTransfer />,
     to: "/movimientos",
   },
   {
@@ -90,11 +90,6 @@ export const SecondarylinksArray = [
     label: "Configuración",
     icon: <AiOutlineSetting />,
     to: "/configurar",
-  },
-  {
-    label: "Acerca de",
-    icon: <TbPig />,
-    to: "/acercade",
   },
 ];
 

@@ -102,18 +102,28 @@ export function ConfiguracionTemplate() {
 
 const Container = styled.div`
   min-height: 100vh;
-  padding: 15px;
+  padding: 10px;
   width: 100%;
   background: ${({ theme }) => theme.bgtotal};
   color: ${({ theme }) => theme.text};
   display: grid;
   grid-template:
-    "header" 100px
+    "header" auto
     "area2" auto;
+
+  @media (min-width: 576px) {
+    padding: 12px;
+  }
+
+  @media (min-width: 768px) {
+    padding: 15px;
+    grid-template:
+      "header" 100px
+      "area2" auto;
+  }
 
   .header {
     grid-area: header;
-    /* background-color: rgba(103, 93, 241, 0.14); */
     display: flex;
     align-items: center;
   }
@@ -124,20 +134,63 @@ const Container = styled.div`
     align-items: center;
     flex-direction: column;
     justify-content: start;
-    gap: 30px;
+    gap: 20px;
     align-self: center;
+    padding: 0 12px;
+
+    @media (min-width: 576px) {
+      gap: 25px;
+      padding: 0 16px;
+    }
+
+    @media (min-width: 768px) {
+      gap: 30px;
+      padding: 0;
+    }
+
     h1 {
-      font-size: 3rem;
+      font-size: 2rem;
+
+      @media (min-width: 576px) {
+        font-size: 2.5rem;
+      }
+
+      @media (min-width: 768px) {
+        font-size: 3rem;
+      }
     }
   }
 `;
 
 const ContentCard = styled.div`
   display: flex;
+  flex-direction: column;
   text-align: start;
-  align-items: center;
-  gap: 20px;
+  align-items: stretch;
+  gap: 12px;
   position: relative;
   width: 100%;
   justify-content: center;
+
+  @media (min-width: 576px) {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  @media (min-width: 768px) {
+    gap: 20px;
+  }
+
+  span {
+    font-size: 14px;
+
+    @media (min-width: 576px) {
+      font-size: 15px;
+    }
+
+    @media (min-width: 768px) {
+      font-size: 16px;
+    }
+  }
 `;

@@ -5,9 +5,19 @@ import {
   SecondarylinksArray,
   SidebarCard,
 } from "../../../index";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ThemeToggle } from "../../molecules/ThemeToggle";
+import { useAuthStore } from "../../../store/AuthStore";
 
 export function Sidebar({ state, setState }) {
+  const navigate = useNavigate();
+  const signout = useAuthStore((state) => state.signout);
+
+  const handleLogout = async () => {
+    await signout();
+    navigate("/login");
+  };
+
   return (
     <Main $isOpen={state}>
       <span className="Sidebarbutton" onClick={() => setState(!state)}>
@@ -34,7 +44,6 @@ export function Sidebar({ state, setState }) {
               <span className={state ? "label_ver" : "label_oculto"}>
                 {label}
               </span>
-              {/* {state && <span>{label}</span>} */}
             </NavLink>
           </div>
         ))}
@@ -54,14 +63,27 @@ export function Sidebar({ state, setState }) {
               <span className={state ? "label_ver" : "label_oculto"}>
                 {label}
               </span>
-              {/* {state && <span>{label}</span>} */}
             </NavLink>
           </div>
         ))}
 
+        <ThemeToggle isOpen={state} />
+
         <Divider />
 
-        {/*  {state && <SidebarCard />} */}
+        <LogoutContainer 
+          className={state ? "LinkContainer active" : "LinkContainer"}
+          onClick={handleLogout}
+        >
+          <div className="Links">
+            <div className="Linkicon">
+              <v.iconoCerrarSesion />
+            </div>
+            <span className={state ? "label_ver" : "label_oculto"}>
+              Cerrar sesión
+            </span>
+          </div>
+        </LogoutContainer>
       </Container>
     </Main>
   );
@@ -212,4 +234,47 @@ const Divider = styled.div`
   width: 100%;
   background: ${(props) => props.theme.bg4};
   margin: ${() => v.lgSpacing} 0;
+`;
+
+const LogoutContainer = styled.div`
+  margin: 5px 0;
+  transition: all 0.3s ease-in-out;
+  padding: 0 5%;
+  position: relative;
+  cursor: pointer;
+  
+  &:hover {
+    background: ${(props) => props.theme.bgAlpha};
+  }
+
+  .Links {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: calc(${() => v.smSpacing} - 2px) 0;
+    color: ${(props) => props.theme.text};
+    height: 60px;
+
+    .Linkicon {
+      padding: ${() => v.smSpacing} ${() => v.mdSpacing};
+      display: flex;
+
+      svg {
+        font-size: 25px;
+      }
+    }
+
+    .label_ver {
+      transition: 0.3s ease-in-out;
+      opacity: 1;
+    }
+
+    .label_oculto {
+      opacity: 0;
+    }
+  }
+  
+  &.active {
+    padding: 0;
+  }
 `;

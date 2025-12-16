@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import styled from "styled-components";
 import { BsBarChartLine, BsGraphUp, BsPieChart } from "react-icons/bs";
 import {
@@ -21,40 +21,35 @@ export function Tabs() {
   const { año, mes, tipo, tituloBtnDesMovimientos } = useOperaciones();
   const { idusuario } = useUsuariosStore();
 
-  const datagrafica = {
-    type: "line",
-    labels: dataRptMovimientosAñoMes?.map((data) => data.descripcion),
-    datasets: [
-      {
-        fill: true,
-        tension: 0.3,
-        label: "Total",
-        borderRadius: 5,
-        cutout: 30,
-        minBarLength: "100px",
-        data: dataRptMovimientosAñoMes?.map((data) => data.total),
-        backgroundColor: [
-          "rgba(116, 37, 207, 0.2)",
-          "rgba(147, 51, 234, 0.2)",
-          "rgba(59, 130, 246, 0.2)",
-          "rgba(14, 165, 233, 0.2)",
-          "rgba(168, 85, 247, 0.2)",
-          "rgba(236, 72, 153, 0.2)",
-        ],
-        borderColor: [
-          "rgba(116, 37, 207, 1)",
-          "rgba(147, 51, 234, 1)",
-          "rgba(59, 130, 246, 1)",
-          "rgba(14, 165, 233, 1)",
-          "rgba(168, 85, 247, 1)",
-          "rgba(236, 72, 153, 1)",
-        ],
-        borderWidth: 2,
-      },
-    ],
-  };
+  // Memorizamos datagrafica para evitar recalcularla en cada render
+  const datagrafica = useMemo(() => {
+    if (!dataRptMovimientosAñoMes) return null;
+    
+    return {
+      type: "line",
+      labels: dataRptMovimientosAñoMes.map((data) => data.descripcion),
+      datasets: [
+        {
+          fill: true,
+          tension: 0.3,
+          label: "Total",
+          borderRadius: 5,
+          cutout: 30,
+          minBarLength: "100px",
+          data: dataRptMovimientosAñoMes.map((data) => data.total),
+          backgroundColor: dataRptMovimientosAñoMes.map((data) => 
+            data.color ? `${data.color}33` : "rgba(59, 130, 246, 0.2)"
+          ),
+          borderColor: dataRptMovimientosAñoMes.map((data) => 
+            data.color || "rgba(59, 130, 246, 1)"
+          ),
+          borderWidth: 2,
+        },
+      ],
+    };
+  }, [dataRptMovimientosAñoMes]);
 
-  useQuery({
+  const { isLoading } = useQuery({
     queryKey: ["rptMovimientosPorMesAño", {año, mes, tipo, idusuario}],
     queryFn: () =>
       rptMovimientosPorMesAño({
@@ -63,63 +58,66 @@ export function Tabs() {
         tipocategoria: tipo,
         idusuario: idusuario,
       }),
-    staleTime: Infinity,
+    staleTime: 1000 * 60 * 5, // 5 minutos
     refetchOnWindowFocus: false,
+    enabled: !!idusuario, // Solo ejecuta si hay usuario
   });
 
+  // Renderizamos solo el gráfico activo
+  const renderActiveChart = () => {
+    if (isLoading || !datagrafica || !dataRptMovimientosAñoMes) {
+      return <LoadingText>Cargando datos...</LoadingText>;
+    }
+
+    const props = {
+      dataGrafica: datagrafica,
+      dataLeyenda: dataRptMovimientosAñoMes,
+      titulo: tituloBtnDesMovimientos
+    };
+
+    switch(activeTab) {
+      case 0:
+        return <Dona {...props} />;
+      case 1:
+        return <LinealGrafica {...props} />;
+      case 2:
+        return <BarrasGrafica {...props} />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <Container $activeTab={`${activeTab}00%`}>
-      
-      <ul className="tabs">
-        <li
-          className={activeTab == 0 ? "active" : ""}
+    <Container $activeTab={activeTab}>
+      <TabSelector>
+        <TabButton
+          $active={activeTab === 0}
           onClick={() => seleccionar(0)}
+          aria-label="Gráfico de dona"
         >
           <BsPieChart />
-        </li>
+        </TabButton>
 
-        <li
-          className={activeTab == 1 ? "active" : ""}
+        <TabButton
+          $active={activeTab === 1}
           onClick={() => seleccionar(1)}
+          aria-label="Gráfico lineal"
         >
           <BsGraphUp />
-        </li>
+        </TabButton>
 
-        <li
-          className={activeTab == 2 ? "active" : ""}
+        <TabButton
+          $active={activeTab === 2}
           onClick={() => seleccionar(2)}
+          aria-label="Gráfico de barras"
         >
           <BsBarChartLine />
-        </li>
+        </TabButton>
+      </TabSelector>
 
-        <span className="indicador"></span>
-      </ul>
-
-      <div className="tab-content">
-        {activeTab === 0 && (
-          <Dona 
-            dataGrafica={datagrafica}
-            dataLeyenda={dataRptMovimientosAñoMes}
-            titulo={tituloBtnDesMovimientos}
-          />
-        )}
-
-        {activeTab === 1 && (
-          <LinealGrafica 
-            dataGrafica={datagrafica}
-            dataLeyenda={dataRptMovimientosAñoMes}
-            titulo={tituloBtnDesMovimientos}
-          />
-        )}
-
-        {activeTab === 2 && (
-          <BarrasGrafica 
-            dataGrafica={datagrafica}
-            dataLeyenda={dataRptMovimientosAñoMes}
-            titulo={tituloBtnDesMovimientos}
-          />
-        )}
-      </div>
+      <TabContent>
+        {renderActiveChart()}
+      </TabContent>
     </Container>
   );
 }
@@ -132,56 +130,94 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 20px;
-  color: #0f0f0f;
+  padding: 12px;
+  gap: 16px;
 
-  .tabs {
-    list-style: none;
-    display: flex;
-    box-shadow: 0px 10px 20px -3px rgba(0, 0, 0, 0.1);
-    background-color: #202020;
-    position: relative;
-    border-radius: 100px;
-    justify-content: space-between;
-    top: 0;
-    left: 0;
-    color: #fff;
-
-    li {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 54px;
-      width: 150px;
-      font-size: 1.25rem;
-      font-weight: 500;
-      cursor: pointer;
-      z-index: 2;
-    }
-
-    .indicador {
-      position: absolute;
-      display: flex;
-      height: 50px;
-      width: 150px;
-      background-color: #7425cf;
-      z-index: 1;
-      border-radius: 99px;
-      transition: 0.25s ease-out;
-      box-shadow: 0px 10px 20px -3px #7425cf;
-      transform: translateX(${(props) => props.$activeTab});
-    }
+  @media (min-width: 576px) {
+    padding: 16px;
+    gap: 20px;
   }
 
-  .tab-content {
-    position: relative;
-    border-radius: 6px;
-    margin-top: 5px;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3rem;
+  @media (min-width: 768px) {
+    padding: 20px;
+    gap: 24px;
   }
+`;
+
+const TabSelector = styled.div`
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  background: ${({ theme }) => theme.bg2};
+  border-radius: 12px;
+  border: 1px solid ${({ theme }) => theme.border};
+`;
+
+const TabButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  width: 70px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: ${({ $active, theme }) => 
+    $active ? theme.primary : 'transparent'};
+  color: ${({ $active, theme }) => 
+    $active ? '#FFFFFF' : theme.textSecondary};
+  transition: all 0.2s ease;
+
+  @media (min-width: 576px) {
+    height: 46px;
+    width: 90px;
+    font-size: 1.1rem;
+  }
+
+  @media (min-width: 768px) {
+    height: 48px;
+    width: 120px;
+    font-size: 1.25rem;
+  }
+
+  &:hover {
+    background: ${({ $active, theme }) => 
+      $active ? theme.primary : theme.bg3};
+    color: ${({ $active, theme }) => 
+      $active ? '#FFFFFF' : theme.text};
+  }
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+
+  &:hover svg {
+    transform: scale(1.1);
+  }
+`;
+
+const TabContent = styled.div`
+  position: relative;
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+
+  @media (min-width: 576px) {
+    min-height: 350px;
+  }
+
+  @media (min-width: 768px) {
+    min-height: 400px;
+  }
+`;
+
+const LoadingText = styled.p`
+  color: ${({ theme }) => theme.textSecondary};
+  font-size: 16px;
+  font-weight: 500;
 `;

@@ -5,3 +5,77 @@
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
 }
+
+/* ====================================
+   ESTILOS PARA INPUT DATE Y CALENDARIO
+   ==================================== */
+
+/* Input date base */
+input[type="date"] {
+  position: relative;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Icono del calendario */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.8;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.15);
+  background-color: rgba(13, 110, 253, 0.15);
+}
+
+/* Ocultar botones de incremento */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+  display: none;
+}
+
+/* Mejorar campos de fecha */
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  padding: 3px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field:focus,
+input[type="date"]::-webkit-datetime-edit-day-field:focus,
+input[type="date"]::-webkit-datetime-edit-year-field:focus {
+  background-color: rgba(13, 110, 253, 0.2);
+  outline: none;
+  color: #0D6EFD;
+}
+
+/* ====================================
+   ESTILOS PARA MUI COMPONENTS
+   ==================================== */
+
+/* Switch de Material UI */
+.MuiSwitch-root {
+  width: 58px;
+  height: 38px;
+  padding: 8px;
+}
+
+.MuiSwitch-switchBase {
+  padding: 11px;
+}
+
+.MuiSwitch-thumb {
+  width: 16px;
+  height: 16px;
+}
+
+.MuiSwitch-track {
+  border-radius: 20px;
+}

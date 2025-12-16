@@ -12,6 +12,7 @@ import {
   RegistrarCategorias,
   Lottieanimacion,
 } from "../../index";
+import { Device } from "../../styles/breakpoints";
 import vacioverde from "../../assets/vacioverde.json";
 import vaciorojo from "../../assets/vaciorojo.json";
 import { useState } from "react";
@@ -74,8 +75,8 @@ export function CategoriasTemplate({ data }) {
             }}
           >
             <Btndesplegable
-              textcolor={colorCategoria}
-              bgcolor={bgCategoria}
+              textcolor={tipo === "i" ? v.verde : v.rojo}
+              bgcolor={tipo === "i" ? `${v.verde}15` : `${v.rojo}15`}
               text={tituloBtnDes}
               funcion={openTipo}
             />
@@ -88,14 +89,12 @@ export function CategoriasTemplate({ data }) {
             )}
           </div>
         </ContentFiltros>
-      </section>
 
-      <section className="area2">
         <ContentFiltro>
           <Btnfiltro
             funcion={nuevoRegistro}
-            bgcolor={bgCategoria}
-            textcolor={colorCategoria}
+            bgcolor={tipo === "i" ? v.verde : v.rojo}
+            textcolor="#FFFFFF"
             icono={<v.agregar />}
           />
         </ContentFiltro>
@@ -115,6 +114,7 @@ export function CategoriasTemplate({ data }) {
           SetopenRegistro={SetopenRegistro}
           setdataSelect={setdataSelect}
           setAccion={setAccion}
+          tipo={tipo}
         />
       </section>
     </Container>
@@ -123,43 +123,81 @@ export function CategoriasTemplate({ data }) {
 
 const Container = styled.div`
   min-height: 100vh;
-  padding: 15px;
+  padding: 10px;
   width: 100%;
   background: ${({ theme }) => theme.bgtotal};
   color: ${({ theme }) => theme.text};
   display: grid;
   grid-template:
-    "header" 100px
-    "tipo" 100px
-    "area2" 50px
+    "header" auto
+    "filters" auto
     "main" auto;
+  gap: 12px;
+
+  @media ${Device.mobile} {
+    padding: 12px;
+  }
+
+  @media ${Device.tablet} {
+    padding: 15px;
+    gap: 14px;
+  }
+
+  @media ${Device.laptop} {
+    padding: 20px;
+    gap: 16px;
+  }
 
   .header {
     grid-area: header;
-    /* background-color: rgba(103, 93, 241, 0.14); */
     display: flex;
     align-items: center;
   }
 
   .tipo {
-    grid-area: tipo;
-    /* background-color: rgba(229, 67, 26, 0.14); */
+    grid-area: filters;
     display: flex;
-    align-items: center;
-  }
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 0 8px;
 
-  .area2 {
-    grid-area: area2;
-    /* background-color: rgba(77, 237, 106, 0.14); */
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    margin-right: 50px;
+    @media ${Device.mobile} {
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding: 0 12px;
+      gap: 10px;
+    }
+
+    @media ${Device.tablet} {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+
+    @media ${Device.laptop} {
+      padding: 0 24px;
+    }
   }
 
   .main {
     grid-area: main;
-    /* background-color: rgba(179, 46, 241, 0.14); */
+    display: flex;
+    flex-direction: column;
+    padding: 0 8px 16px 8px;
+
+    @media ${Device.mobile} {
+      padding: 0 12px 20px 12px;
+    }
+
+    @media ${Device.tablet} {
+      padding: 0 16px 24px 16px;
+    }
+
+    @media ${Device.laptop} {
+      padding: 0 24px 24px 24px;
+    }
   }
 `;
 

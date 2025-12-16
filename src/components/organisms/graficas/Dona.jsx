@@ -6,10 +6,10 @@ import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export function Dona({ dataGrafica, dataLeyenda, titulo }) {
+export const Dona = React.memo(function Dona({ dataGrafica, dataLeyenda, titulo }) {
   const { datausuarios } = useUsuariosStore();
   const { colorCategoria } = useOperaciones();
-  const style = {width: "400px"}
+  const style = React.useMemo(() => ({ width: "400px" }), []);
 
   return (
     <Container>
@@ -41,7 +41,7 @@ export function Dona({ dataGrafica, dataLeyenda, titulo }) {
       </section>
     </Container>
   );
-}
+});
 
 const Container = styled.div`
   width: 100%;

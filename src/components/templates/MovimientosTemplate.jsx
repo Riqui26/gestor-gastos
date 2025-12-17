@@ -24,7 +24,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export function MovimientosTemplate() {
   const [dataSelect, setdataSelect] = useState([]);
-  const [_accion, setAccion] = useState("");
+  const [accion, setAccion] = useState("");
   const [openRegistro, SetopenRegistro] = useState(false);
   const [value, setValue] = useState(() => dayjs());
   const [formatoFecha, setFormatoFecha] = useState("");
@@ -125,6 +125,7 @@ export function MovimientosTemplate() {
       {openRegistro && (
         <RegistrarMovimientos
           dataSelect={dataSelect}
+          accion={accion}
           state={openRegistro}
           setState={() => SetopenRegistro(!openRegistro)}
         />

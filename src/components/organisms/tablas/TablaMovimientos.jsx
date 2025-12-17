@@ -7,7 +7,7 @@ import {
 import { swalDelete, swalSuccess } from "../../../utils/swalConfig";
 import { designSystem } from "../../../styles/designSystem";
 import { useState } from "react";
-import { BsCheckCircleFill, BsXCircleFill } from "react-icons/bs";
+import { BsCheckCircleFill, BsXCircleFill, BsPencilFill } from "react-icons/bs";
 
 export function TablaMovimientos({
   data,
@@ -48,6 +48,14 @@ export function TablaMovimientos({
     return `${day}/${month}/${year}`;
   }
 
+  function fueEditado(item) {
+    // Si existe updated_at y es diferente de created_at, fue editado
+    if (item.updated_at && item.created_at) {
+      return new Date(item.updated_at).getTime() > new Date(item.created_at).getTime();
+    }
+    return false;
+  }
+
   return (
     <Container>
       <TableWrapper>
@@ -71,6 +79,7 @@ export function TablaMovimientos({
               )
               .map((item) => {
                 const isPaid = item.estado === "1";
+                const isEdited = fueEditado(item);
                 return (
                   <Tr key={item.id}>
                     <Td>
@@ -92,7 +101,14 @@ export function TablaMovimientos({
                       <DateText>{formatearFecha(item.fecha)}</DateText>
                     </Td>
                     <Td>
-                      <DescriptionText>{item.descripcion}</DescriptionText>
+                      <DescriptionWrapper>
+                        <DescriptionText>{item.descripcion}</DescriptionText>
+                        {isEdited && (
+                          <EditedBadge title="Este movimiento fue editado">
+                            <BsPencilFill />
+                          </EditedBadge>
+                        )}
+                      </DescriptionWrapper>
                     </Td>
                     <Td>
                       <CategoryBadge>{item.categorias}</CategoryBadge>
@@ -235,10 +251,38 @@ const DateText = styled.span`
   font-family: 'Courier New', monospace;
 `;
 
+const DescriptionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 const DescriptionText = styled.span`
   font-weight: 500;
   font-size: 14px;
   text-transform: capitalize;
+`;
+
+const EditedBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 6px;
+  background: ${({ theme }) => theme.primary}15;
+  color: ${({ theme }) => theme.primary};
+  border-radius: ${designSystem.radius.sm};
+  font-size: 11px;
+  cursor: help;
+  transition: all ${designSystem.transition.fast};
+
+  svg {
+    font-size: 10px;
+  }
+
+  &:hover {
+    background: ${({ theme }) => theme.primary}25;
+    transform: scale(1.05);
+  }
 `;
 
 const CategoryBadge = styled.span`

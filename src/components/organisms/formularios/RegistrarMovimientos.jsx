@@ -17,24 +17,41 @@ import {
   DatePickerMovimiento,
 } from "../../../index";
 
-export function RegistrarMovimientos({ setState, dataSelect }) {
+export function RegistrarMovimientos({ setState, dataSelect, accion = "Nuevo" }) {
   const { cuentaItemSelect } = useCuentaStore();
   const { datacategoria, categoriaItemSelect, selectCategoria, mostrarCategorias } =
     useCategoriasStore();
   const { tipo } = useOperaciones();
-  const { insertarMovimientos } = useMovimientosStore();
+  const { insertarMovimientos, editarMovimiento } = useMovimientosStore();
   const { idusuario } = useUsuariosStore();
 
-  const [estado, setEstado] = useState(true);
+  const esEdicion = accion === "Editar" && dataSelect?.id;
+  const [estado, setEstado] = useState(esEdicion ? dataSelect.estado === "1" : true);
   const [ignorar, setIgnorar] = useState(false);
   const [stateCategorias, setStateCategorias] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(
+    esEdicion && dataSelect?.fecha 
+      ? dataSelect.fecha 
+      : new Date().toISOString().split('T')[0]
+  );
 
   useEffect(() => {
     if (idusuario && tipo) {
       mostrarCategorias({ idusuario: idusuario, tipo: tipo });
     }
   }, []);
+
+  useEffect(() => {
+    // Si estamos editando y hay una categoría seleccionada en dataSelect
+    if (esEdicion && dataSelect?.idcategoria && datacategoria.length > 0) {
+      const categoriaActual = datacategoria.find(
+        cat => cat.id === dataSelect.idcategoria
+      );
+      if (categoriaActual) {
+        selectCategoria(categoriaActual);
+      }
+    }
+  }, [dataSelect, datacategoria, esEdicion]);
 
   const {
     register,
@@ -48,10 +65,7 @@ export function RegistrarMovimientos({ setState, dataSelect }) {
       return;
     }
 
-    let estadoText = 0;
-    if (estado) {
-      estadoText = 1;
-    }
+    let estadoText = estado ? 1 : 0;
 
     const p = {
       tipo: tipo,
@@ -64,10 +78,18 @@ export function RegistrarMovimientos({ setState, dataSelect }) {
     };
 
     try {
-      await insertarMovimientos(p);
+      if (esEdicion) {
+        // Si estamos editando, agregar el ID y llamar a editar
+        p.id = dataSelect.id;
+        await editarMovimiento(p);
+      } else {
+        // Si es nuevo, insertar
+        await insertarMovimientos(p);
+      }
       setState();
     } catch (err) {
-      alert(err);
+      console.error("Error al guardar movimiento:", err);
+      alert("Error al guardar el movimiento");
     }
   };
 
@@ -80,7 +102,7 @@ export function RegistrarMovimientos({ setState, dataSelect }) {
       <Modal onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
           <ModalTitle>
-            Nuevo {tipo == "i" ? "ingreso" : "gasto"}
+            {esEdicion ? "Editar" : "Nuevo"} {tipo == "i" ? "ingreso" : "gasto"}
           </ModalTitle>
           <CloseButton onClick={setState}>
             <v.iconocerrar />

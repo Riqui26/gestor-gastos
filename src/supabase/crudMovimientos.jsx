@@ -28,6 +28,46 @@ export const InsertarMovimientos = async (p) => {
   }
 };
 
+export async function EditarMovimientos(p) {
+  try {
+    const { data, error } = await supabase
+      .from("movimientos")
+      .update({
+        tipo: p.tipo,
+        estado: p.estado,
+        fecha: p.fecha,
+        descripcion: p.descripcion,
+        idcuenta: p.idcuenta,
+        valor: p.valor,
+        idcategoria: p.idcategoria,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", p.id)
+      .select();
+    
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al editar",
+        text: error.message,
+      });
+      throw error;
+    }
+
+    if (data) {
+      Swal.fire({
+        icon: "success",
+        title: "Actualizado",
+        text: "El movimiento ha sido editado correctamente",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  } catch (error) {
+    alert(error.error_description || error.message + " editar movimientos");
+  }
+}
+
 export async function EliminarMovimientos(p) {
   try {
     const { error } = await supabase
@@ -50,6 +90,10 @@ export async function MostrarMovimientosPorMesAño(p) {
       iduser: p.idusuario,
       tipocategoria: p.tipocategoria,
     });
+    // Ordenar por fecha descendente (más reciente primero)
+    if (data) {
+      return data.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    }
     return data;
   } catch (error) {}
 }
